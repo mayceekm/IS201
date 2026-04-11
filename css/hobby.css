@@ -1,0 +1,366 @@
+/* ===========================
+   hobby.css — From Scratch
+   Topic: Travel & Exploring
+=========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:wght@300;400;600&display=swap');
+
+/* --- CSS Variables --- */
+:root {
+    --sand: #f5efe6;
+    --terracotta: #c4622d;
+    --deep-brown: #2b1a0e;
+    --warm-white: #fdf8f2;
+    --olive: #6b7c4a;
+    --muted: #7a6a5a;
+    --accent: #e8a87c;
+}
+
+/* ---- 1. Base Reset & Body ---- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--sand);
+    color: var(--deep-brown);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.15rem;
+    line-height: 1.75;
+}
+
+/* ---- 2. Navigation Bar ---- */
+div#navbar {
+    background-color: var(--deep-brown);
+    padding: 1rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+
+div#navbar .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+}
+
+div#navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+}
+
+div#navbar ul li a {
+    color: var(--sand);
+    text-decoration: none;
+    font-size: 1rem;
+    font-family: 'Crimson Pro', serif;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+}
+
+div#navbar ul li a:hover {
+    color: var(--accent);
+}
+
+/* ---- 3. Hero Section ---- */
+div#hero {
+    background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80');
+    background-size: cover;
+    background-position: center 40%;
+    min-height: 92vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 4rem 2.5rem;
+    position: relative;
+}
+
+div#hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(43,26,14,0.85) 0%, rgba(43,26,14,0.1) 60%);
+}
+
+div#hero-text {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+}
+
+div#hero-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    color: var(--warm-white);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+}
+
+div#hero-text h1 em {
+    color: var(--accent);
+    font-style: italic;
+}
+
+div#hero-text p {
+    color: #e8ddd3;
+    font-size: 1.25rem;
+    font-weight: 300;
+    max-width: 500px;
+}
+
+/* ---- 4. Section: Content Wrapper ---- */
+div.section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+div.section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--terracotta);
+    margin-bottom: 1.2rem;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.4rem;
+    display: inline-block;
+}
+
+div.section p {
+    color: var(--deep-brown);
+    font-size: 1.15rem;
+    margin-bottom: 1.2rem;
+}
+
+/* ---- 5. Anchor Jump Target Offset ---- */
+span.anchor-target {
+    display: block;
+    position: relative;
+    top: -80px;
+    visibility: hidden;
+}
+
+/* ---- 6. On-Page Anchor Link (Jump Nav) ---- */
+div#jump-nav {
+    background-color: var(--warm-white);
+    border-left: 4px solid var(--terracotta);
+    padding: 1.2rem 2rem;
+    margin: 2rem auto;
+    max-width: 860px;
+    border-radius: 0 6px 6px 0;
+}
+
+div#jump-nav p {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--terracotta);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+div#jump-nav ol {
+    margin-left: 1.5rem;
+    color: var(--deep-brown);
+}
+
+div#jump-nav ol li {
+    margin-bottom: 0.3rem;
+}
+
+div#jump-nav ol li a {
+    color: var(--terracotta);
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+div#jump-nav ol li a:hover {
+    text-decoration: underline;
+}
+
+/* ---- 7. Lists ---- */
+ul.reasons-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 1.5rem 0;
+}
+
+ul.reasons-list li {
+    padding: 0.5rem 0 0.5rem 2rem;
+    position: relative;
+    color: var(--deep-brown);
+    border-bottom: 1px solid #e0d4c4;
+}
+
+ul.reasons-list li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--terracotta);
+    font-size: 0.85rem;
+    top: 0.6rem;
+}
+
+ol.destinations-list {
+    padding-left: 1.5rem;
+    color: var(--deep-brown);
+}
+
+ol.destinations-list li {
+    margin-bottom: 0.7rem;
+}
+
+ol.destinations-list li strong {
+    color: var(--terracotta);
+    font-family: 'Playfair Display', serif;
+}
+
+/* ---- 8. Photo Grid ---- */
+div#photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    margin: 2rem auto;
+    max-width: 860px;
+    padding: 0 2rem;
+}
+
+div#photo-grid img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+div#photo-grid img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+
+/* ---- 9. Video Section ---- */
+div#video-section {
+    background-color: var(--deep-brown);
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+div#video-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+div#video-section p {
+    color: #c8b8a8;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+div.video-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+}
+
+div.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+}
+
+/* ---- 10. Tableau Section ---- */
+div#tableau-section {
+    background-color: var(--warm-white);
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+div#tableau-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--terracotta);
+    margin-bottom: 0.5rem;
+}
+
+div#tableau-section p {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+div.tableau-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+/* ---- 11. Quote Block ---- */
+blockquote.travel-quote {
+    border-left: 4px solid var(--terracotta);
+    margin: 2rem 0;
+    padding: 1rem 1.5rem;
+    background-color: var(--warm-white);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--deep-brown);
+}
+
+blockquote.travel-quote cite {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-family: 'Crimson Pro', serif;
+    color: var(--muted);
+}
+
+/* ---- 12. Footer ---- */
+div#footer {
+    background-color: var(--deep-brown);
+    color: var(--muted);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.9rem;
+    font-family: 'Crimson Pro', serif;
+}
+
+div#footer a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+div#footer a:hover {
+    text-decoration: underline;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+    div#photo-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    div#navbar ul {
+        gap: 1rem;
+    }
+}
