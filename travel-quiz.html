@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Where Should You Travel Next?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --sand: #f5efe6;
+            --terracotta: #c4622d;
+            --deep-brown: #2b1a0e;
+            --warm-white: #fdf8f2;
+            --olive: #6b7c4a;
+            --muted: #7a6a5a;
+            --accent: #e8a87c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--sand);
+            font-family: 'Crimson Pro', Georgia, serif;
+            color: var(--deep-brown);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAV */
+        nav {
+            background-color: var(--deep-brown);
+            padding: 1rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        nav a.brand {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        nav a.back {
+            color: var(--sand);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+        }
+        nav a.back:hover { color: var(--accent); }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            background: linear-gradient(to bottom, var(--warm-white), var(--sand));
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            color: var(--deep-brown);
+            line-height: 1.15;
+        }
+        .hero h1 em { color: var(--terracotta); font-style: italic; }
+        .hero p {
+            margin-top: 0.8rem;
+            color: var(--muted);
+            font-size: 1.15rem;
+            font-weight: 300;
+        }
+
+        /* QUIZ CONTAINER */
+        #quiz-container {
+            max-width: 680px;
+            margin: 2.5rem auto 4rem;
+            padding: 0 1.5rem;
+            width: 100%;
+        }
+
+        /* PROGRESS BAR */
+        .progress-wrap {
+            margin-bottom: 2rem;
+        }
+        .progress-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.4rem;
+        }
+        .progress-bar-bg {
+            background: #e0d4c4;
+            border-radius: 99px;
+            height: 6px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            background: var(--terracotta);
+            height: 100%;
+            border-radius: 99px;
+            transition: width 0.5s ease;
+        }
+
+        /* QUESTION CARD */
+        .question-card {
+            background: var(--warm-white);
+            border-radius: 12px;
+            padding: 2.2rem 2.5rem;
+            box-shadow: 0 6px 28px rgba(43,26,14,0.10);
+            animation: fadeSlide 0.4s ease;
+        }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .question-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.55rem;
+            color: var(--deep-brown);
+            margin-bottom: 1.6rem;
+            line-height: 1.3;
+        }
+
+        /* OPTIONS */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+        .option-btn {
+            background: var(--sand);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 1rem 1.3rem;
+            text-align: left;
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.05rem;
+            color: var(--deep-brown);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+        .option-btn:hover {
+            border-color: var(--terracotta);
+            background: #fdf3ec;
+            transform: translateX(4px);
+        }
+        .option-btn.selected {
+            border-color: var(--terracotta);
+            background: #fdf3ec;
+            font-weight: 600;
+        }
+        .option-emoji {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        /* NEXT BUTTON */
+        .next-btn {
+            margin-top: 1.8rem;
+            width: 100%;
+            padding: 1rem;
+            background: var(--terracotta);
+            color: var(--warm-white);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: 0.03em;
+        }
+        .next-btn:hover { background: #a8521f; transform: translateY(-1px); }
+        .next-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        /* RESULT CARD */
+        #result-card {
+            display: none;
+            background: var(--warm-white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 36px rgba(43,26,14,0.15);
+            animation: fadeSlide 0.6s ease;
+        }
+        #result-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+        .result-body {
+            padding: 2rem 2.5rem 2.5rem;
+        }
+        .result-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--terracotta);
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+        .result-body h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--deep-brown);
+            margin-bottom: 0.3rem;
+        }
+        .result-tagline {
+            font-style: italic;
+            color: var(--muted);
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+        }
+        .result-body p {
+            font-size: 1.1rem;
+            line-height: 1.75;
+            color: var(--deep-brown);
+            margin-bottom: 1.5rem;
+        }
+        .result-facts {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.8rem;
+        }
+        .fact-chip {
+            background: var(--sand);
+            border-radius: 99px;
+            padding: 0.35rem 1rem;
+            font-size: 0.9rem;
+            color: var(--deep-brown);
+            border: 1px solid #e0d4c4;
+        }
+        .restart-btn {
+            background: transparent;
+            border: 2px solid var(--terracotta);
+            color: var(--terracotta);
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .restart-btn:hover {
+            background: var(--terracotta);
+            color: var(--warm-white);
+        }
+
+        /* FOOTER */
+        footer {
+            margin-top: auto;
+            background: var(--deep-brown);
+            color: var(--muted);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="brand">Maycee Murray</a>
+    <a href="hobby.html" class="back">← Back to Travel Page</a>
+</nav>
+
+<div class="hero">
+    <h1>Where Should You<br><em>Travel Next?</em></h1>
+    <p>Answer 5 quick questions and find your perfect destination.</p>
+</div>
+
+<div id="quiz-container">
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+        <div class="progress-label" id="progress-label">Question 1 of 5</div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill" style="width:20%"></div>
+        </div>
+    </div>
+
+    <!-- Question Card -->
+    <div class="question-card" id="question-card">
+        <h2 id="question-text"></h2>
+        <div class="options" id="options-list"></div>
+        <button class="next-btn" id="next-btn" disabled onclick="nextQuestion()">Next →</button>
+    </div>
+
+    <!-- Result Card -->
+    <div id="result-card">
+        <img id="result-img" src="" alt="Destination" />
+        <div class="result-body">
+            <div class="result-label">Your Next Destination</div>
+            <h2 id="result-name"></h2>
+            <div class="result-tagline" id="result-tagline"></div>
+            <p id="result-desc"></p>
+            <div class="result-facts" id="result-facts"></div>
+            <button class="restart-btn" onclick="restart()">Take It Again ↺</button>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p>A web app by Maycee Murray &mdash; <a href="hobby.html">Travel Hobby Page</a></p>
+</footer>
+
+<script>
+    const questions = [
+        {
+            text: "What's your ideal travel vibe?",
+            options: [
+                { emoji: "🏔️", text: "Wild & adventurous — mountains, hiking, the outdoors", tags: ["adventure"] },
+                { emoji: "🏛️", text: "Rich in history — ancient ruins, old cities, museums", tags: ["culture"] },
+                { emoji: "🏖️", text: "Relaxed & warm — beaches, sunshine, slow days", tags: ["beach"] },
+                { emoji: "🌆", text: "Urban energy — great food, nightlife, street art", tags: ["city"] },
+            ]
+        },
+        {
+            text: "What would you eat there?",
+            options: [
+                { emoji: "🍣", text: "Something completely unfamiliar — I love the unknown", tags: ["adventure", "culture"] },
+                { emoji: "🍕", text: "Classic regional cuisine done perfectly", tags: ["culture", "city"] },
+                { emoji: "🥥", text: "Fresh, tropical, light — fruit, seafood, coconut", tags: ["beach"] },
+                { emoji: "🥩", text: "Hearty and bold — grilled meats, stews, big flavors", tags: ["adventure", "city"] },
+            ]
+        },
+        {
+            text: "How do you feel about language barriers?",
+            options: [
+                { emoji: "😍", text: "I love it — figuring it out is part of the fun", tags: ["adventure", "culture"] },
+                { emoji: "😊", text: "Fine with some — I'll pick up a few phrases", tags: ["city", "beach"] },
+                { emoji: "😅", text: "Prefer somewhere English is widely spoken", tags: ["beach", "city"] },
+                { emoji: "🗣️", text: "I speak Spanish — that opens a lot of doors", tags: ["adventure", "beach"] },
+            ]
+        },
+        {
+            text: "What's your travel pace?",
+            options: [
+                { emoji: "⚡", text: "Packed — I want to see and do everything", tags: ["city", "culture"] },
+                { emoji: "🌿", text: "Balanced — some plans, some wandering", tags: ["culture", "adventure"] },
+                { emoji: "☁️", text: "Slow — I want to actually feel a place, not just see it", tags: ["beach", "culture"] },
+                { emoji: "🎲", text: "Spontaneous — I'll figure it out when I get there", tags: ["adventure"] },
+            ]
+        },
+        {
+            text: "What would make the trip unforgettable?",
+            options: [
+                { emoji: "🌅", text: "A view that drops my jaw — nature at its most dramatic", tags: ["adventure"] },
+                { emoji: "🎨", text: "Feeling like I walked into another century", tags: ["culture"] },
+                { emoji: "🤿", text: "Crystal water and nothing to do but float", tags: ["beach"] },
+                { emoji: "🎶", text: "Finding a tiny restaurant and staying for three hours", tags: ["city", "culture"] },
+            ]
+        }
+    ];
+
+    const destinations = {
+        adventure: {
+            name: "Patagonia, Argentina",
+            tagline: "The edge of the world — raw, untouched, unforgettable.",
+            desc: "Patagonia is for people who want to earn their views. Think trekking through Torres del Paine, glacier hikes, and nights in remote refugios. It's dramatic in every sense — the landscape, the weather, the scale. You'll feel very small and very alive.",
+            img: "https://images.unsplash.com/photo-1531761535209-180857e963b9?w=900&q=80",
+            facts: ["Best in Nov–Feb", "Spanish helpful", "Hiking paradise", "End of the world vibes"]
+        },
+        culture: {
+            name: "Morocco",
+            tagline: "Ancient medinas, mosaic tiles, and a thousand different spices.",
+            desc: "Morocco is a sensory overload in the best way. Marrakech's medina, the blue streets of Chefchaouen, the Sahara at dawn — every hour feels like a different world. History is literally built into the walls here, and the food is some of the best on earth.",
+            img: "https://images.unsplash.com/photo-1489493585363-d69421e0edd3?w=900&q=80",
+            facts: ["Arabic & French spoken", "Incredible food", "Vibrant souks", "Mix of ancient & modern"]
+        },
+        beach: {
+            name: "Portugal's Alentejo Coast",
+            tagline: "Golden cliffs, quiet coves, and the best sunset in Europe.",
+            desc: "Forget the tourist crowds. Portugal's southwest coast is wild, rugged, and stunning. Think dramatic cliff-top walks, near-empty beaches, fresh grilled fish, and small towns that haven't changed in decades. It's the beach trip for people who think they don't like beach trips.",
+            img: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=900&q=80",
+            facts: ["English widely spoken", "Affordable", "Year-round mild weather", "Perfect for slow travel"]
+        },
+        city: {
+            name: "Medellín, Colombia",
+            tagline: "A city that reinvented itself — and wants to show you everything.",
+            desc: "Medellín is one of the great comeback stories in urban history, and it wears that transformation proudly. Cable cars over hillside neighborhoods, world-class street art, an electric food scene, and people who genuinely love their city. Plus — your Spanish minor will feel very useful here.",
+            img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80",
+            facts: ["Spanish essential", "Eternal spring climate", "Finance & innovation hub", "Vibrant nightlife"]
+        }
+    };
+
+    let currentQ = 0;
+    let scores = { adventure: 0, culture: 0, beach: 0, city: 0 };
+    let selected = null;
+
+    function renderQuestion() {
+        const q = questions[currentQ];
+        document.getElementById('question-text').textContent = q.text;
+        document.getElementById('progress-label').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+        document.getElementById('progress-fill').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+
+        const list = document.getElementById('options-list');
+        list.innerHTML = '';
+        selected = null;
+        document.getElementById('next-btn').disabled = true;
+        document.getElementById('next-btn').textContent = currentQ === questions.length - 1 ? 'See My Destination ✦' : 'Next →';
+
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerHTML = `<span class="option-emoji">${opt.emoji}</span><span>${opt.text}</span>`;
+            btn.onclick = () => selectOption(i, btn, opt.tags);
+            list.appendChild(btn);
+        });
+
+        // Re-animate card
+        const card = document.getElementById('question-card');
+        card.style.animation = 'none';
+        card.offsetHeight; // reflow
+        card.style.animation = '';
+    }
+
+    function selectOption(i, btn, tags) {
+        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selected = tags;
+        document.getElementById('next-btn').disabled = false;
+    }
+
+    function nextQuestion() {
+        if (!selected) return;
+        selected.forEach(tag => scores[tag]++);
+        currentQ++;
+        if (currentQ < questions.length) {
+            renderQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById('question-card').style.display = 'none';
+        document.querySelector('.progress-wrap').style.display = 'none';
+
+        const top = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+        const dest = destinations[top];
+
+        document.getElementById('result-img').src = dest.img;
+        document.getElementById('result-name').textContent = dest.name;
+        document.getElementById('result-tagline').textContent = dest.tagline;
+        document.getElementById('result-desc').textContent = dest.desc;
+
+        const factsEl = document.getElementById('result-facts');
+        factsEl.innerHTML = dest.facts.map(f => `<span class="fact-chip">✦ ${f}</span>`).join('');
+
+        const card = document.getElementById('result-card');
+        card.style.display = 'block';
+    }
+
+    function restart() {
+        scores = { adventure: 0, culture: 0, beach: 0, city: 0 };
+        currentQ = 0;
+        document.getElementById('result-card').style.display = 'none';
+        document.getElementById('question-card').style.display = 'block';
+        document.querySelector('.progress-wrap').style.display = 'block';
+        renderQuestion();
+    }
+
+    // Init
+    renderQuestion();
+</script>
+
+</body>
+</html>
